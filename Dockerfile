@@ -1,28 +1,22 @@
-# 使用 Node.js的 Alpine 版本
-FROM node:alpine
-
-# 设置 NODE_ENV 环境变量为 production
-ENV NODE_ENV=production
-
-# 设置 PORT 环境变量为默认值 3000
-ENV PORT=3000
-
-# 暴露容器监听的端口
-EXPOSE ${PORT}
+FROM node:18-alpine
 
 # 设置工作目录
 WORKDIR /app
 
-# 复制应用程序代码和依赖项清单
+# 复制 package.json
+COPY package*.json ./
 
+# 安装依赖
+RUN npm install
+
+# 复制应用代码
 COPY index.js ./
-COPY package.json ./
-# 安装应用程序依赖
-    
-RUN apk update \
-    && apk add --no-cache bash curl zsh \
-    && npm install \
-    && rm -rf /var/lib/apt/lists/*
 
-# 启动应用程序
-CMD node index.js
+# 暴露端口
+EXPOSE 3000
+
+# 设置环境变量(可以在运行时覆盖)
+ENV PORT=3000
+
+# 启动应用
+CMD ["node", "index.js"]

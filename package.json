@@ -1,26 +1,15 @@
 {
-  "name": "app",
+  "name": "websocket-proxy-server",
   "version": "1.0.0",
-  "description": "A Node.js app for web service, process monitoring and subscription management.",
+  "description": "WebSocket proxy server for Docker deployment",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
-  "keywords": [
-    "express",
-    "http-proxy",
-    "process",
-    "monitoring",
-    "subscription",
-    "cloudflare",
-      "nezha"
-  ],
-  "author": "myself",
-  "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2",
-    "http-proxy-middleware": "^2.0.6",
-    "request": "^2.88.2",
-      "axios": "^1.6.7"
+    "ws": "^8.14.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
