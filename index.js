@@ -1,9 +1,877 @@
-const WebSocket = require('ws');
-const net = require('net');
 const http = require('http');
 const https = require('https');
-const dns = require('dns').promises;
+const fs = require('fs');
+const path = require('path');
+const { WebSocketServer } = require('ws');
+const net = require('net');
+const dgram = require('dgram');
+const { URL } = require('url');
+const crypto = require('crypto');
+const os = require('os');
+const axios = require('axios');
+const { exec } = require('child_process');
 
-const PORT = process.env.PORT || 3000;
-const TOKEN = process.env.TOKEN || 'ech123456';
-const _0x3b36eb=_0x18d2;(function(_0x26463f,_0x13158b){const _0x193dad=_0x18d2,_0x3c0b2c=_0x26463f();while(!![]){try{const _0x1bf7e2=-parseInt(_0x193dad(0xcd))/0x1+parseInt(_0x193dad(0xc8))/0x2*(-parseInt(_0x193dad(0x8d))/0x3)+-parseInt(_0x193dad(0x97))/0x4*(parseInt(_0x193dad(0xb9))/0x5)+-parseInt(_0x193dad(0xd6))/0x6+parseInt(_0x193dad(0xd0))/0x7*(-parseInt(_0x193dad(0xb0))/0x8)+-parseInt(_0x193dad(0x96))/0x9*(parseInt(_0x193dad(0xe2))/0xa)+-parseInt(_0x193dad(0xa7))/0xb*(-parseInt(_0x193dad(0x92))/0xc);if(_0x1bf7e2===_0x13158b)break;else _0x3c0b2c['push'](_0x3c0b2c['shift']());}catch(_0x306c42){_0x3c0b2c['push'](_0x3c0b2c['shift']());}}}(_0x1298,0xd568c));const CF_FALLBACK_IPS=process[_0x3b36eb(0xa8)][_0x3b36eb(0xab)]?process[_0x3b36eb(0xa8)][_0x3b36eb(0xab)]['split'](','):['ProxyIP.JP.CMLiussss.net'],DOH_SERVERS=[_0x3b36eb(0x8f),_0x3b36eb(0xc5),_0x3b36eb(0x8b)],dnsCache=new Map(),DNS_CACHE_TTL=0x493e0;function _0x1298(){const _0x1e2828=['DNS\x20Cache\x20TTL:\x20','substring','59004420LBSIAu','write','destroy','\x20(via\x20','198VTHPiK','1475336iMRMOB','createServer','\x20resolved\x20to\x20','DATA:','[System\x20DNS\x20Failed]\x20','data','toLowerCase','now','CONNECTED','destroyed','end','Failed\x20to\x20resolve\x20','writeHead','includes','cannot\x20connect','type','11jwLrhL','env','timestamp','/stats','PRIP','[DoH\x20Cache\x20Hit]\x20','enabled','0.0.0.0','error','351912pXEtdA','No\x20A\x20record\x20found','Hello-world','CONNECT:','readyState','isIP','proxy\x20request','\x20->\x20','catch','10QLjIdG','protocol','get','Answer','Not\x20Found','headers','startsWith','ERROR:','url','[DoH\x20Success]\x20','lastIndexOf','[DoH\x20Query]\x20Resolving\x20','https://cloudflare-dns.com/dns-query','resolve4','text/plain','2404460nhRrqD','log','timeout','once','Web\x20listening\x20on\x20port\x20','1215083VQjiIy','length','close','35glhNGP','CLOSE','send','Server','connect','application/dns-json','322602ZAdIeY','connection','DoH\x20Servers:\x20','...','[DoH\x20Fallback]\x20Using\x20system\x20DNS\x20for\x20','toString','message','Token\x20authentication:\x20','stringify','etimedout','set','application/json','279190aLEmML','indexOf','https://1.1.1.1/dns-query','OPEN','3zVeumT','?name=','https://dns.google/dns-query'];_0x1298=function(){return _0x1e2828;};return _0x1298();}async function resolveDoH(_0x40b582){const _0x5014e4=_0x3b36eb,_0x5e5ac0=dnsCache['get'](_0x40b582);if(_0x5e5ac0&&Date[_0x5014e4(0x9e)]()-_0x5e5ac0[_0x5014e4(0xa9)]<DNS_CACHE_TTL)return console[_0x5014e4(0xc9)](_0x5014e4(0xac)+_0x40b582+_0x5014e4(0xb7)+_0x5e5ac0['ip']),_0x5e5ac0['ip'];if(net[_0x5014e4(0xb5)](_0x40b582))return _0x40b582;console[_0x5014e4(0xc9)](_0x5014e4(0xc4)+_0x40b582+_0x5014e4(0xd9));for(const _0x1abcbc of DOH_SERVERS){try{const _0x5ed5a3=await queryDoH(_0x1abcbc,_0x40b582);if(_0x5ed5a3)return dnsCache[_0x5014e4(0xe0)](_0x40b582,{'ip':_0x5ed5a3,'timestamp':Date['now']()}),console[_0x5014e4(0xc9)](_0x5014e4(0xc2)+_0x40b582+_0x5014e4(0xb7)+_0x5ed5a3+_0x5014e4(0x95)+_0x1abcbc+')'),_0x5ed5a3;}catch(_0x5d91b0){console[_0x5014e4(0xaf)]('[DoH\x20Failed]\x20'+_0x1abcbc+':\x20'+_0x5d91b0[_0x5014e4(0xdc)]);}}console['log'](_0x5014e4(0xda)+_0x40b582);try{const _0x2773b5=await dns[_0x5014e4(0xc6)](_0x40b582);if(_0x2773b5&&_0x2773b5[_0x5014e4(0xce)]>0x0){const _0x2cf746=_0x2773b5[0x0];return dnsCache[_0x5014e4(0xe0)](_0x40b582,{'ip':_0x2cf746,'timestamp':Date['now']()}),_0x2cf746;}}catch(_0x4c3173){console[_0x5014e4(0xaf)](_0x5014e4(0x9b)+_0x40b582+':\x20'+_0x4c3173[_0x5014e4(0xdc)]);}throw new Error(_0x5014e4(0xa2)+_0x40b582);}function queryDoH(_0x1faaa6,_0x10a8a0){return new Promise((_0x4dcaab,_0x598764)=>{const _0x55ddb0=_0x18d2,_0x17ce41=_0x1faaa6+_0x55ddb0(0x8e)+_0x10a8a0+'&type=A';https[_0x55ddb0(0xbb)](_0x17ce41,{'headers':{'Accept':_0x55ddb0(0xd5)},'timeout':0x1388},_0x5945a2=>{const _0x306411=_0x55ddb0;let _0x575d14='';_0x5945a2['on'](_0x306411(0x9c),_0x2ff282=>{_0x575d14+=_0x2ff282;}),_0x5945a2['on'](_0x306411(0xa1),()=>{const _0x184026=_0x306411;try{const _0xaf551e=JSON['parse'](_0x575d14);if(_0xaf551e[_0x184026(0xbc)]&&_0xaf551e[_0x184026(0xbc)][_0x184026(0xce)]>0x0)for(const _0x258ac of _0xaf551e['Answer']){if(_0x258ac[_0x184026(0xa6)]===0x1){_0x4dcaab(_0x258ac[_0x184026(0x9c)]);return;}}_0x598764(new Error(_0x184026(0xb1)));}catch(_0x221203){_0x598764(_0x221203);}});})['on']('error',_0x598764)['on'](_0x55ddb0(0xca),()=>{_0x598764(new Error('DoH\x20query\x20timeout'));});});}const encoder=new TextEncoder(),server=http[_0x3b36eb(0x98)]((_0x414141,_0x135c4e)=>{const _0x2e0a0f=_0x3b36eb;if(_0x414141['url']==='/')_0x135c4e[_0x2e0a0f(0xa3)](0xc8,{'Content-Type':_0x2e0a0f(0xc7)}),_0x135c4e[_0x2e0a0f(0xa1)](_0x2e0a0f(0xb2));else _0x414141[_0x2e0a0f(0xc1)]===_0x2e0a0f(0xaa)?(_0x135c4e[_0x2e0a0f(0xa3)](0xc8,{'Content-Type':_0x2e0a0f(0xe1)}),_0x135c4e[_0x2e0a0f(0xa1)](JSON[_0x2e0a0f(0xde)]({'cacheSize':dnsCache['size'],'dohServers':DOH_SERVERS}))):(_0x135c4e[_0x2e0a0f(0xa3)](0x194),_0x135c4e[_0x2e0a0f(0xa1)](_0x2e0a0f(0xbd)));}),wss=new WebSocket[(_0x3b36eb(0xd3))]({'server':server,'verifyClient':_0x122fa4=>{const _0x37d5b0=_0x3b36eb,_0xe8b3a4=_0x122fa4['req'][_0x37d5b0(0xbe)]['sec-websocket-protocol'];if(TOKEN&&_0xe8b3a4!==TOKEN)return![];return!![];}});function _0x18d2(_0x3beb9e,_0x5ce96b){const _0x1298d0=_0x1298();return _0x18d2=function(_0x18d24f,_0x3c2316){_0x18d24f=_0x18d24f-0x8b;let _0x27af01=_0x1298d0[_0x18d24f];return _0x27af01;},_0x18d2(_0x3beb9e,_0x5ce96b);}wss['on'](_0x3b36eb(0xd7),(_0x156830,_0x1a8908)=>{const _0xe971a8=_0x3b36eb;TOKEN&&_0x1a8908[_0xe971a8(0xbe)]['sec-websocket-protocol']&&(_0x156830[_0xe971a8(0xba)]=TOKEN),handleSession(_0x156830)[_0xe971a8(0xb8)](()=>safeCloseWebSocket(_0x156830));});async function handleSession(_0x339be1){const _0xa71263=_0x3b36eb;let _0x3749ff=null,_0x5b64d1=![];const _0xf859f0=()=>{if(_0x5b64d1)return;_0x5b64d1=!![];if(_0x3749ff){try{_0x3749ff['destroy']();}catch{}_0x3749ff=null;}safeCloseWebSocket(_0x339be1);},_0x1c98a7=_0x3e7838=>{const _0x27fe79=_0x18d2;_0x3e7838['on']('data',_0x5bcfa7=>{const _0x268601=_0x18d2;if(!_0x5b64d1&&_0x339be1[_0x268601(0xb4)]===WebSocket[_0x268601(0x8c)])try{_0x339be1[_0x268601(0xd2)](_0x5bcfa7);}catch(_0x37ddb8){_0xf859f0();}}),_0x3e7838['on'](_0x27fe79(0xa1),()=>{const _0x2eed2c=_0x27fe79;if(!_0x5b64d1){try{_0x339be1['send'](_0x2eed2c(0xd1));}catch{}_0xf859f0();}}),_0x3e7838['on'](_0x27fe79(0xaf),()=>{_0xf859f0();});},_0x2ed7e4=_0x3af40b=>{const _0x3c8e7d=_0x18d2;if(_0x3af40b[0x0]==='['){const _0x475a3c=_0x3af40b[_0x3c8e7d(0xe3)](']');return{'host':_0x3af40b[_0x3c8e7d(0x91)](0x1,_0x475a3c),'port':parseInt(_0x3af40b['substring'](_0x475a3c+0x2),0xa)};}const _0xa08c9f=_0x3af40b[_0x3c8e7d(0xc3)](':');return{'host':_0x3af40b[_0x3c8e7d(0x91)](0x0,_0xa08c9f),'port':parseInt(_0x3af40b['substring'](_0xa08c9f+0x1),0xa)};},_0xe463be=_0x22b136=>{const _0x5f96ae=_0x18d2,_0xad54f7=_0x22b136?.[_0x5f96ae(0xdc)]?.[_0x5f96ae(0x9d)]()||'';return _0xad54f7['includes'](_0x5f96ae(0xb6))||_0xad54f7[_0x5f96ae(0xa4)](_0x5f96ae(0xa5))||_0xad54f7['includes']('econnrefused')||_0xad54f7[_0x5f96ae(0xa4)](_0x5f96ae(0xdf));},_0x41845c=async(_0x4749ad,_0x2ffabb)=>{const _0x433233=_0x18d2,{host:_0x214622,port:_0x320e13}=_0x2ed7e4(_0x4749ad),_0x24abcc=[null,...CF_FALLBACK_IPS];for(let _0x38dd67=0x0;_0x38dd67<_0x24abcc['length'];_0x38dd67++){try{const _0x1bf733=_0x24abcc[_0x38dd67]||_0x214622;let _0x4b1f56=_0x1bf733;if(!net['isIP'](_0x1bf733))try{_0x4b1f56=await resolveDoH(_0x1bf733),console['log']('[Connect]\x20'+_0x1bf733+_0x433233(0x99)+_0x4b1f56);}catch(_0x4d219d){console['error']('[DNS\x20Error]\x20Failed\x20to\x20resolve\x20'+_0x1bf733+':\x20'+_0x4d219d[_0x433233(0xdc)]);}_0x3749ff=net[_0x433233(0xd4)]({'host':_0x4b1f56,'port':_0x320e13,'timeout':0x2710}),await new Promise((_0x18ff3b,_0x1dea86)=>{const _0xb42e4d=_0x433233;_0x3749ff[_0xb42e4d(0xcb)]('connect',_0x18ff3b),_0x3749ff[_0xb42e4d(0xcb)](_0xb42e4d(0xaf),_0x1dea86);});_0x2ffabb&&_0x3749ff['write'](_0x2ffabb);_0x339be1[_0x433233(0xd2)](_0x433233(0x9f)),_0x1c98a7(_0x3749ff);return;}catch(_0xeef833){if(_0x3749ff){try{_0x3749ff[_0x433233(0x94)]();}catch{}_0x3749ff=null;}if(!_0xe463be(_0xeef833)||_0x38dd67===_0x24abcc[_0x433233(0xce)]-0x1)throw _0xeef833;}}};_0x339be1['on'](_0xa71263(0xdc),async _0x35e477=>{const _0x24aa66=_0xa71263;if(_0x5b64d1)return;try{const _0x9177b=_0x35e477[_0x24aa66(0xdb)]();if(_0x9177b['startsWith'](_0x24aa66(0xb3))){const _0xd9217=_0x9177b[_0x24aa66(0xe3)]('|',0x8);await _0x41845c(_0x9177b[_0x24aa66(0x91)](0x8,_0xd9217),_0x9177b[_0x24aa66(0x91)](_0xd9217+0x1));}else{if(_0x9177b[_0x24aa66(0xbf)](_0x24aa66(0x9a)))_0x3749ff&&!_0x3749ff[_0x24aa66(0xa0)]&&_0x3749ff[_0x24aa66(0x93)](_0x9177b[_0x24aa66(0x91)](0x5));else{if(_0x9177b===_0x24aa66(0xd1))_0xf859f0();else _0x35e477 instanceof Buffer&&_0x3749ff&&!_0x3749ff['destroyed']&&_0x3749ff[_0x24aa66(0x93)](_0x35e477);}}}catch(_0x435bb8){try{_0x339be1[_0x24aa66(0xd2)](_0x24aa66(0xc0)+_0x435bb8[_0x24aa66(0xdc)]);}catch{}_0xf859f0();}}),_0x339be1['on'](_0xa71263(0xcf),_0xf859f0),_0x339be1['on']('error',_0xf859f0);}function safeCloseWebSocket(_0x315e1b){const _0x3461f6=_0x3b36eb;try{(_0x315e1b['readyState']===WebSocket[_0x3461f6(0x8c)]||_0x315e1b['readyState']===WebSocket['CLOSING'])&&_0x315e1b['close'](0x3e8,'Server\x20closed');}catch{}}server['listen'](PORT,_0x3b36eb(0xae),()=>{const _0x401f0e=_0x3b36eb;console[_0x401f0e(0xc9)](_0x401f0e(0xcc)+PORT),console['log'](_0x401f0e(0xdd)+(TOKEN?_0x401f0e(0xad):'disabled')),console[_0x401f0e(0xc9)](_0x401f0e(0xd8)+DOH_SERVERS['join'](',\x20')),console[_0x401f0e(0xc9)](_0x401f0e(0x90)+DNS_CACHE_TTL/0x3e8+'s');});
+// ======================== 环境变量配置 ========================
+const PORT = process.env.PORT || 8080;
+const WS_PATH = process.env.WS_PATH || '/ws';
+const TOKEN = process.env.TOKEN || '';
+const CIDRS = process.env.CIDRS || '0.0.0.0/0,::/0';
+const USE_TLS = process.env.USE_TLS === 'true';
+const CERT_FILE = process.env.CERT_FILE || '';
+const KEY_FILE = process.env.KEY_FILE || '';
+
+// ======================== 哪吒配置 ========================
+const NEZHA_SERVER = process.env.NSERVER || '';  // 格式: 域名:端口
+const NEZHA_PORT = process.env.NPORT || '443';
+const NEZHA_KEY = process.env.NKEY || '';
+const UUID = process.env.UUID || crypto.randomUUID();
+
+// ======================== 哪吒状态管理 ========================
+let nezhaProcessId = null;
+let processCheckInterval = null;
+let consecutiveChecks = 0;
+
+// ======================== 工具函数 ========================
+function parseCIDR(cidr) {
+  const parts = cidr.split('/');
+  const ip = parts[0];
+  const bits = parseInt(parts[1]);
+  
+  const ipParts = ip.split('.').map(Number);
+  const ipNum = (ipParts[0] << 24) | (ipParts[1] << 16) | (ipParts[2] << 8) | ipParts[3];
+  const mask = ~((1 << (32 - bits)) - 1);
+  
+  return { network: ipNum & mask, mask };
+}
+
+function isIPInCIDR(ip, cidrList) {
+  if (cidrList.includes('0.0.0.0/0') || cidrList.includes('::/0')) return true;
+  
+  const ipParts = ip.split('.').map(Number);
+  const ipNum = (ipParts[0] << 24) | (ipParts[1] << 16) | (ipParts[2] << 8) | ipParts[3];
+  
+  for (const cidr of cidrList) {
+    if (cidr.includes(':')) continue;
+    const { network, mask } = parseCIDR(cidr);
+    if ((ipNum & mask) === network) return true;
+  }
+  return false;
+}
+
+function isNormalCloseError(err) {
+  if (!err) return false;
+  const msg = err.message || '';
+  return msg.includes('ECONNRESET') || 
+         msg.includes('EPIPE') || 
+         msg.includes('EOF') ||
+         err.code === 'ECONNRESET';
+}
+
+// ======================== 哪吒功能函数 ========================
+function detectArchitecture() {
+  const arch = os.arch();
+  return (arch === 'arm' || arch === 'arm64') ? 'arm64' : 'amd64';
+}
+
+function downloadNezhaBinary(binaryName, downloadUrl, callback) {
+  const savePath = path.join('/tmp', binaryName);
+  const writer = fs.createWriteStream(savePath);
+  
+  console.log(`开始下载哪吒客户端: ${binaryName}`);
+  
+  axios({
+    method: 'get',
+    url: downloadUrl,
+    responseType: 'stream'
+  })
+    .then(response => {
+      response.data.pipe(writer);
+      writer.on('finish', () => {
+        writer.close();
+        console.log(`下载完成: ${binaryName}`);
+        callback(null, binaryName);
+      });
+    })
+    .catch(err => {
+      console.error(`下载失败: ${binaryName} - ${err.message}`);
+      callback(err.message);
+    });
+}
+
+function downloadAllBinaries() {
+  const arch = detectArchitecture();
+  const binaries = [];
+  
+  if (arch === 'arm64') {
+    binaries.push({ 
+      name: 'npm', 
+      url: 'https://github.com/dsadsadsss/java-wanju/releases/download/jar/agent2-linux_arm64.bin' 
+    });
+  } else {
+    binaries.push({ 
+      name: 'npm', 
+      url: 'https://github.com/dsadsadsss/java-wanju/releases/download/jar/agent2-linux_amd64.bin' 
+    });
+  }
+
+  if (binaries.length === 0) {
+    console.log(`未找到适合架构 (${arch}) 的二进制文件`);
+    return;
+  }
+
+  binaries.forEach(binary => {
+    downloadNezhaBinary(binary.name, binary.url, (err) => {
+      if (err) {
+        console.log(`${binary.name} 下载失败`);
+      } else {
+        console.log(`${binary.name} 下载成功，准备启动`);
+        setupNezhaBinary();
+      }
+    });
+  });
+}
+
+function setupNezhaBinary() {
+  const binaryPath = '/tmp/npm';
+  const configPath = '/tmp/config.yml';
+  
+  if (!fs.existsSync(binaryPath)) {
+    console.error('二进制文件不存在！');
+    return;
+  }
+  
+  if (!fs.existsSync(configPath)) {
+    console.error('配置文件不存在，无法启动！');
+    return;
+  }
+  
+  console.log('准备启动哪吒客户端...');
+  
+  fs.chmod(binaryPath, '755', (err) => {
+    if (err) {
+      console.error(`设置执行权限失败: ${err}`);
+    } else {
+      startNezhaClient();
+    }
+  });
+}
+
+function startNezhaClient() {
+  if (!NEZHA_SERVER || !NEZHA_PORT || !NEZHA_KEY) {
+    console.log('哪吒配置信息不完整，跳过启动');
+    return;
+  }
+  
+  console.log('启动哪吒客户端...');
+  
+  const command = '/tmp/npm -c /tmp/config.yml';
+  
+  try {
+    const nezhaProcess = exec(command, { detached: true, stdio: 'ignore' });
+    
+    nezhaProcess.on('spawn', () => {
+      nezhaProcessId = nezhaProcess.pid;
+      console.log(`哪吒客户端已启动，进程 ID: ${nezhaProcessId}`);
+      startProcessMonitoring();
+    });
+    
+    nezhaProcess.on('error', (err) => {
+      console.error(`哪吒客户端启动失败: ${err.message}`);
+      nezhaProcessId = null;
+    });
+    
+    nezhaProcess.on('exit', (code, signal) => {
+      console.log(`哪吒客户端退出，退出码: ${code}, 信号: ${signal}`);
+      nezhaProcessId = null;
+    });
+    
+    nezhaProcess.unref();
+    
+  } catch (e) {
+    console.error(`启动哪吒客户端异常: ${e}`);
+  }
+}
+
+function startProcessMonitoring() {
+  if (processCheckInterval) {
+    clearInterval(processCheckInterval);
+  }
+  
+  consecutiveChecks = 0;
+  
+  processCheckInterval = setInterval(() => {
+    checkProcessStatus();
+  }, 20000);
+}
+
+function checkProcessStatus() {
+  if (!nezhaProcessId) {
+    console.log('哪吒客户端未运行，尝试重启...');
+    consecutiveChecks = 0;
+    startNezhaClient();
+    return;
+  }
+  
+  try {
+    process.kill(nezhaProcessId, 0);
+    consecutiveChecks++;
+    console.log(`哪吒客户端 ${nezhaProcessId} 运行中... (第 ${consecutiveChecks} 次检查)`);
+    
+    if (consecutiveChecks >= 2) {
+      console.log('哪吒客户端稳定运行，停止监控');
+      clearInterval(processCheckInterval);
+      processCheckInterval = null;
+    }
+  } catch (err) {
+    if (err.code === 'ESRCH') {
+      console.log(`哪吒客户端 ${nezhaProcessId} 已停止，准备重启...`);
+      nezhaProcessId = null;
+      consecutiveChecks = 0;
+      startNezhaClient();
+    } else {
+      console.error(`检查进程状态失败: ${err.message}`);
+    }
+  }
+}
+
+function generateNezhaConfig() {
+  const configContent = `client_secret: ${NEZHA_KEY}
+debug: false
+disable_auto_update: false
+disable_command_execute: false
+disable_force_update: false
+disable_nat: false
+disable_send_query: false
+gpu: false
+insecure_tls: true
+ip_report_period: 1800
+report_delay: 3
+server: ${NEZHA_SERVER}
+skip_connection_count: false
+skip_procs_count: false
+temperature: false
+tls: ${NEZHA_PORT === '443' ? 'true' : 'false'}
+use_gitee_to_upgrade: false
+use_ipv6_country_code: false
+uuid: ${UUID}`;
+
+  const configPath = '/tmp/config.yml';
+  
+  try {
+    fs.writeFileSync(configPath, configContent, 'utf8');
+    console.log('哪吒配置文件已生成: /tmp/config.yml');
+    return true;
+  } catch (err) {
+    console.error(`生成配置文件失败: ${err.message}`);
+    return false;
+  }
+}
+
+// ======================== HTTP 服务器 ========================
+const allowedCIDRs = CIDRS.split(',').map(c => c.trim());
+
+const requestHandler = (req, res) => {
+  const clientIP = req.socket.remoteAddress?.replace('::ffff:', '') || '';
+  if (!isIPInCIDR(clientIP, allowedCIDRs)) {
+    console.log(`拒绝访问: IP ${clientIP} 不在允许的范围内`);
+    res.writeHead(403, { 'Connection': 'close' });
+    res.end('Forbidden');
+    return;
+  }
+
+  if (req.url === '/' || req.url === '/index.html') {
+    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+    res.end(getGameHTML());
+    return;
+  }
+
+  // 添加健康检查端点
+  if (req.url === '/health') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({
+      status: 'running',
+      nezha: nezhaProcessId ? 'active' : 'inactive',
+      uptime: process.uptime().toFixed(2),
+      timestamp: new Date().toISOString()
+    }));
+    return;
+  }
+
+  res.writeHead(404);
+  res.end('Not Found');
+};
+
+let server;
+if (USE_TLS && CERT_FILE && KEY_FILE) {
+  const options = {
+    key: fs.readFileSync(KEY_FILE),
+    cert: fs.readFileSync(CERT_FILE)
+  };
+  server = https.createServer(options, requestHandler);
+  console.log(`HTTPS 服务器启动在端口 ${PORT}`);
+} else {
+  server = http.createServer(requestHandler);
+  console.log(`HTTP 服务器启动在端口 ${PORT}`);
+}
+
+// ======================== WebSocket 服务器 ========================
+const wss = new WebSocketServer({ 
+  noServer: true,
+  clientTracking: true
+});
+
+server.on('upgrade', (req, socket, head) => {
+  const clientIP = socket.remoteAddress?.replace('::ffff:', '') || '';
+  
+  if (!isIPInCIDR(clientIP, allowedCIDRs)) {
+    console.log(`WS 拒绝: IP ${clientIP} 不在允许范围内`);
+    socket.write('HTTP/1.1 403 Forbidden\r\n\r\n');
+    socket.destroy();
+    return;
+  }
+
+  if (TOKEN) {
+    const protocol = req.headers['sec-websocket-protocol'];
+    if (protocol !== TOKEN) {
+      console.log(`Token 验证失败,来自 ${clientIP}`);
+      socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n');
+      socket.destroy();
+      return;
+    }
+  }
+
+  if (req.url === WS_PATH) {
+    wss.handleUpgrade(req, socket, head, (ws) => {
+      wss.emit('connection', ws, req);
+    });
+  } else {
+    socket.destroy();
+  }
+});
+
+// ======================== WebSocket 连接处理 ========================
+wss.on('connection', (ws, req) => {
+  console.log(`新的 WebSocket 连接来自 ${req.socket.remoteAddress}`);
+  
+  const conns = new Map();
+  const udpConns = new Map();
+  const udpTargets = new Map();
+
+  ws.on('message', (data, isBinary) => {
+    if (isBinary) {
+      handleBinaryMessage(data, ws, conns, udpConns, udpTargets);
+    } else {
+      handleTextMessage(data.toString(), ws, conns, udpConns, udpTargets);
+    }
+  });
+
+  ws.on('close', () => {
+    console.log(`WebSocket 连接关闭 ${req.socket.remoteAddress}`);
+    cleanup(conns, udpConns);
+  });
+
+  ws.on('error', (err) => {
+    if (!isNormalCloseError(err)) {
+      console.error('WebSocket 错误:', err.message);
+    }
+  });
+
+  ws.on('ping', (data) => {
+    ws.pong(data);
+  });
+});
+
+function handleBinaryMessage(data, ws, conns, udpConns, udpTargets) {
+  const str = data.toString();
+  
+  if (str.startsWith('UDP_DATA:')) {
+    const content = str.slice(9);
+    const pipeIndex = content.indexOf('|');
+    if (pipeIndex > 0) {
+      const connID = content.slice(0, pipeIndex);
+      const payload = data.slice(9 + pipeIndex + 1);
+      
+      const udpConn = udpConns.get(connID);
+      const targetAddr = udpTargets.get(connID);
+      if (udpConn && targetAddr) {
+        udpConn.send(payload, targetAddr.port, targetAddr.host, (err) => {
+          if (err) {
+            console.log(`[UDP:${connID}] 发送失败:`, err.message);
+          } else {
+            console.log(`[UDP:${connID}] 已发送数据到 ${targetAddr.host}:${targetAddr.port},大小: ${payload.length}`);
+          }
+        });
+      }
+    }
+    return;
+  }
+
+  if (str.startsWith('DATA:')) {
+    const content = str.slice(5);
+    const pipeIndex = content.indexOf('|');
+    if (pipeIndex > 0) {
+      const connID = content.slice(0, pipeIndex);
+      const payload = data.slice(5 + pipeIndex + 1);
+      
+      const conn = conns.get(connID);
+      if (conn && !conn.destroyed) {
+        conn.write(payload);
+      }
+    }
+  }
+}
+
+function handleTextMessage(data, ws, conns, udpConns, udpTargets) {
+  if (data.startsWith('UDP_CONNECT:')) {
+    const content = data.slice(12);
+    const parts = content.split('|');
+    if (parts.length === 2) {
+      const [connID, targetAddr] = parts;
+      handleUDPConnect(connID, targetAddr, ws, udpConns, udpTargets);
+    }
+    return;
+  }
+
+  if (data.startsWith('UDP_CLOSE:')) {
+    const connID = data.slice(10);
+    const udpConn = udpConns.get(connID);
+    if (udpConn) {
+      udpConn.close();
+      udpConns.delete(connID);
+      udpTargets.delete(connID);
+      console.log(`[UDP:${connID}] 连接已关闭`);
+    }
+    return;
+  }
+
+  if (data.startsWith('CLAIM:')) {
+    const content = data.slice(6);
+    const parts = content.split('|');
+    if (parts.length === 2) {
+      ws.send(`CLAIM_ACK:${parts[0]}|${parts[1]}`);
+    }
+    return;
+  }
+
+  if (data.startsWith('TCP:')) {
+    const content = data.slice(4);
+    const parts = content.split('|');
+    if (parts.length >= 2) {
+      const connID = parts[0];
+      const targetAddr = parts[1];
+      const firstFrameData = parts[2] || '';
+      console.log(`[TCP] 请求转发,ID: ${connID},目标: ${targetAddr},首帧: ${firstFrameData.length}`);
+      handleTCPConnect(connID, targetAddr, firstFrameData, ws, conns);
+    }
+    return;
+  }
+
+  if (data.startsWith('DATA:')) {
+    const content = data.slice(5);
+    const parts = content.split('|');
+    if (parts.length === 2) {
+      const [connID, payload] = parts;
+      const conn = conns.get(connID);
+      if (conn && !conn.destroyed) {
+        conn.write(payload);
+      }
+    }
+    return;
+  }
+
+  if (data.startsWith('CLOSE:')) {
+    const connID = data.slice(6);
+    const conn = conns.get(connID);
+    if (conn) {
+      conn.destroy();
+      conns.delete(connID);
+      console.log(`[TCP] 客户端请求关闭: ${connID}`);
+    }
+    return;
+  }
+}
+
+function handleUDPConnect(connID, targetAddr, ws, udpConns, udpTargets) {
+  console.log(`[UDP:${connID}] 收到连接请求,目标: ${targetAddr}`);
+  
+  const [host, port] = targetAddr.split(':');
+  const udpSocket = dgram.createSocket('udp4');
+  
+  udpConns.set(connID, udpSocket);
+  udpTargets.set(connID, { host, port: parseInt(port) });
+
+  udpSocket.on('message', (msg, rinfo) => {
+    console.log(`[UDP:${connID}] 收到响应来自 ${rinfo.address}:${rinfo.port},大小: ${msg.length}`);
+    
+    const prefix = Buffer.from(`UDP_DATA:${connID}|${rinfo.address}:${rinfo.port}|`);
+    const response = Buffer.concat([prefix, msg]);
+    
+    if (ws.readyState === 1) {
+      ws.send(response);
+    }
+  });
+
+  udpSocket.on('error', (err) => {
+    console.log(`[UDP:${connID}] 错误:`, err.message);
+    ws.send(`UDP_ERROR:${connID}|${err.message}`);
+  });
+
+  ws.send(`UDP_CONNECTED:${connID}`);
+  console.log(`[UDP:${connID}] 已设置目标: ${targetAddr}`);
+}
+
+function handleTCPConnect(connID, targetAddr, firstFrameData, ws, conns) {
+  const [host, port] = targetAddr.split(':');
+  const conn = net.connect(parseInt(port), host);
+
+  conn.on('connect', () => {
+    console.log(`[TCP:${connID}] 已连接到 ${targetAddr}`);
+    conns.set(connID, conn);
+
+    if (firstFrameData) {
+      conn.write(firstFrameData);
+    }
+
+    if (ws.readyState === 1) {
+      ws.send(`CONNECTED:${connID}`);
+    }
+  });
+
+  conn.on('data', (data) => {
+    if (ws.readyState === 1) {
+      const prefix = Buffer.from(`DATA:${connID}|`);
+      const message = Buffer.concat([prefix, data]);
+      ws.send(message);
+    }
+  });
+
+  conn.on('end', () => {
+    console.log(`[TCP:${connID}] 连接结束`);
+    if (ws.readyState === 1) {
+      ws.send(`CLOSE:${connID}`);
+    }
+    conns.delete(connID);
+  });
+
+  conn.on('error', (err) => {
+    if (!isNormalCloseError(err)) {
+      console.log(`[TCP:${connID}] 错误:`, err.message);
+    }
+    if (ws.readyState === 1) {
+      ws.send(`CLOSE:${connID}`);
+    }
+    conns.delete(connID);
+  });
+}
+
+function cleanup(conns, udpConns) {
+  for (const [id, conn] of conns) {
+    conn.destroy();
+    console.log(`[清理] TCP连接: ${id}`);
+  }
+  conns.clear();
+
+  for (const [id, udpConn] of udpConns) {
+    udpConn.close();
+    console.log(`[清理] UDP连接: ${id}`);
+  }
+  udpConns.clear();
+}
+
+// ======================== 游戏页面 ========================
+function getGameHTML() {
+  return `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>贪吃蛇游戏 - WebSocket 代理服务器</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #fff;
+    }
+    .container {
+      text-align: center;
+      background: rgba(255,255,255,0.1);
+      padding: 30px;
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+    h1 { margin-bottom: 10px; font-size: 2.5em; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+    .info { margin-bottom: 20px; font-size: 1.2em; opacity: 0.9; }
+    canvas {
+      border: 3px solid #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+      background: #000;
+    }
+    .controls {
+      margin-top: 20px;
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    button {
+      padding: 12px 24px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: #fff;
+      font-weight: bold;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+    }
+    button:active { transform: translateY(0); }
+    .score {
+      font-size: 1.5em;
+      margin-top: 15px;
+      font-weight: bold;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    }
+    .status {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      background: rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🐍 贪吃蛇游戏</h1>
+    <div class="info">WebSocket 代理服务器运行中</div>
+    <canvas id="game" width="400" height="400"></canvas>
+    <div class="score">得分: <span id="score">0</span></div>
+    <div class="controls">
+      <button onclick="startGame()">开始游戏</button>
+      <button onclick="pauseGame()">暂停</button>
+      <button onclick="resetGame()">重置</button>
+    </div>
+    <div class="status">使用方向键或 WASD 控制蛇的移动</div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('game');
+    const ctx = canvas.getContext('2d');
+    const scoreEl = document.getElementById('score');
+    
+    const gridSize = 20;
+    const tileCount = canvas.width / gridSize;
+    
+    let snake = [{x: 10, y: 10}];
+    let dx = 0, dy = 0;
+    let food = {x: 15, y: 15};
+    let score = 0;
+    let gameLoop = null;
+    let paused = false;
+
+    function startGame() {
+      if (gameLoop) clearInterval(gameLoop);
+      paused = false;
+      gameLoop = setInterval(update, 100);
+    }
+
+    function pauseGame() {
+      paused = !paused;
+    }
+
+    function resetGame() {
+      if (gameLoop) clearInterval(gameLoop);
+      snake = [{x: 10, y: 10}];
+      dx = 0; dy = 0;
+      score = 0;
+      scoreEl.textContent = score;
+      generateFood();
+      draw();
+    }
+
+    function update() {
+      if (paused) return;
+
+      const head = {x: snake[0].x + dx, y: snake[0].y + dy};
+
+      if (head.x < 0 || head.x >= tileCount || head.y < 0 || head.y >= tileCount) {
+        clearInterval(gameLoop);
+        alert('游戏结束!得分: ' + score);
+        return;
+      }
+
+      if (snake.some(s => s.x === head.x && s.y === head.y)) {
+        clearInterval(gameLoop);
+        alert('游戏结束!得分: ' + score);
+        return;
+      }
+
+      snake.unshift(head);
+
+      if (head.x === food.x && head.y === food.y) {
+        score++;
+        scoreEl.textContent = score;
+        generateFood();
+      } else {
+        snake.pop();
+      }
+
+      draw();
+    }
+
+    function generateFood() {
+      food = {
+        x: Math.floor(Math.random() * tileCount),
+        y: Math.floor(Math.random() * tileCount)
+      };
+      if (snake.some(s => s.x === food.x && s.y === food.y)) {
+        generateFood();
+      }
+    }
+
+    function draw() {
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      snake.forEach((segment, index) => {
+        ctx.fillStyle = index === 0 ? '#4ade80' : '#22c55e';
+        ctx.fillRect(segment.x * gridSize, segment.y * gridSize, gridSize - 2, gridSize - 2);
+      });
+
+      ctx.fillStyle = '#ef4444';
+      ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize - 2, gridSize - 2);
+    }
+
+    document.addEventListener('keydown', (e) => {
+      switch(e.key) {
+        case 'ArrowUp':
+        case 'w':
+        case 'W':
+          if (dy === 0) { dx = 0; dy = -1; }
+          break;
+        case 'ArrowDown':
+        case 's':
+        case 'S':
+          if (dy === 0) { dx = 0; dy = 1; }
+          break;
+        case 'ArrowLeft':
+        case 'a':
+        case 'A':
+          if (dx === 0) { dx = -1; dy = 0; }
+          break;
+        case 'ArrowRight':
+        case 'd':
+        case 'D':
+          if (dx === 0) { dx = 1; dy = 0; }
+          break;
+      }
+    });
+
+    draw();
+  </script>
+</body>
+</html>`;
+}
+
+// ======================== 优雅退出处理 ========================
+const gracefulShutdown = () => {
+  console.log('\n正在优雅关闭服务器...');
+  
+  if (processCheckInterval) {
+    clearInterval(processCheckInterval);
+    processCheckInterval = null;
+  }
+  
+  if (nezhaProcessId) {
+    try {
+      console.log(`停止哪吒客户端进程 ${nezhaProcessId}...`);
+      process.kill(nezhaProcessId, 'SIGTERM');
+      
+      setTimeout(() => {
+        try {
+          process.kill(nezhaProcessId, 0);
+          console.log('强制终止哪吒客户端进程...');
+          process.kill(nezhaProcessId, 'SIGKILL');
+        } catch (e) {
+          console.log('哪吒客户端进程已停止');
+        }
+      }, 5000);
+    } catch (e) {
+      console.log('哪吒客户端进程已停止');
+    }
+  }
+  
+  wss.clients.forEach(client => {
+    try {
+      client.close();
+    } catch (e) {
+      console.error('关闭 WebSocket 客户端失败:', e.message);
+    }
+  });
+  
+  server.close(() => {
+    console.log('HTTP/HTTPS 服务器已关闭');
+    process.exit(0);
+  });
+  
+  setTimeout(() => {
+    console.error('强制退出超时,强制关闭');
+    process.exit(1);
+  }, 10000);
+};
+
+process.on('SIGTERM', gracefulShutdown);
+process.on('SIGINT', gracefulShutdown);
+
+// ======================== 启动服务 ========================
+server.listen(PORT, () => {
+  console.log(`\n========================================`);
+  console.log(`WebSocket 代理服务器已启动`);
+  console.log(`端口: ${PORT}`);
+  console.log(`WebSocket 路径: ${WS_PATH}`);
+  console.log(`TLS: ${USE_TLS ? '启用' : '禁用'}`);
+  console.log(`允许的 CIDR: ${CIDRS}`);
+  console.log(`Token 保护: ${TOKEN ? '启用' : '禁用'}`);
+  console.log(`========================================\n`);
+  
+  if (NEZHA_SERVER && NEZHA_PORT && NEZHA_KEY) {
+    console.log('检测到哪吒配置,准备启动哪吒客户端...');
+    console.log(`哪吒服务器: ${NEZHA_SERVER}:${NEZHA_PORT}`);
+    console.log(`UUID: ${UUID}\n`);
+    
+    if (generateNezhaConfig()) {
+      downloadAllBinaries();
+    }
+  } else {
+    console.log('未配置哪吒监控,跳过哪吒客户端启动\n');
+  }
+});
+
+// ======================== 错误处理 ========================
+process.on('uncaughtException', (err) => {
+  console.error('未捕获的异常:', err);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('未处理的 Promise 拒绝:', reason);
+});
+
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`端口 ${PORT} 已被占用`);
+    process.exit(1);
+  } else {
+    console.error('服务器错误:', err);
+  }
+});
