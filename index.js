@@ -12,9 +12,9 @@ const axios = require('axios');
 const { exec } = require('child_process');
 
 // ======================== 环境变量配置 ========================
-const PORT = process.env.PORT || 8080;
-const WS_PATH = process.env.WS_PATH || '/ws';
-const TOKEN = process.env.TOKEN || '';
+const PORT = process.env.PORT || 3000;
+const WS_PATH = process.env.WS_PATH || '';
+const TOKEN = process.env.TOKEN || 'ech123456';
 const CIDRS = process.env.CIDRS || '0.0.0.0/0,::/0';
 const USE_TLS = process.env.USE_TLS === 'true';
 const CERT_FILE = process.env.CERT_FILE || '';
