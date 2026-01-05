@@ -11,7 +11,7 @@ const axios = require('axios');
 const { exec } = require('child_process');
 
 const PORT = process.env.PORT || 3000;
-const TOKEN = process.env.TOKEN || '';
+const TOKEN = process.env.TOKEN || 'ech123456';
 const CF_FALLBACK_IPS = process.env.PRIP 
   ? process.env.PRIP.split(',') 
   : ['ProxyIP.JP.CMLiussss.net'];
